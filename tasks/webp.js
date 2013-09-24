@@ -70,6 +70,7 @@ Experimental Options:
 'use strict';
 
 module.exports = function(grunt) {
+
   var path = require('path');
   grunt.registerMultiTask('webp', 'WebP image format converter.', function() {
     /**
@@ -290,17 +291,17 @@ module.exports = function(grunt) {
           cmd: 'cwebp',
           args: args
         }, function(error, result, code) {
-          grunt.log.writeln(code+''+result);
           if (code !== 0) {
             return grunt.warn(String(code));
           }
-
           next(error);
         });
 
         /**
          * displays the output and error streams via the parent process.
          */
+        process.stdout.setMaxListeners(0)
+        process.stderr.setMaxListeners(0)
         child.stdout.pipe(process.stdout);
         child.stderr.pipe(process.stderr);
       }, done);
